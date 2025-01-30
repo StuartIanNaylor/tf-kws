@@ -29,3 +29,4 @@ pcm.vlevel {
     }]
 }
 ```
+`python3 kws-stream.py --noise_index=3 --device=13`
