@@ -13,8 +13,7 @@ parser.add_argument('--source_path', default='./out', help='kw sample files path
 parser.add_argument('--label_index', type=int, default=0, help='kw label index of hit test default=0')
 parser.add_argument('--kw_length', type=float, default=1.0, help='length of kw (secs) default=1.0')
 parser.add_argument('--sample_rate', type=int, default=16000, help='Sample rate default=16000')
-parser.add_argument('--hit_sensitivity', type=float, default=0.70, help='kw_sensitivity default=0.70')
-parser.add_argument('--greater_than', help='compare > than default < than', action="store_true")
+parser.add_argument('--prob_file', default='./prob.txt', help='Sample file prob results default=./prob.txt')
 args = parser.parse_args()
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
@@ -28,9 +27,11 @@ output_details = interpreter.get_output_details()
 inputs = []
 for s in range(len(input_details)):
   inputs.append(np.zeros(input_details[s]['shape'], dtype=np.float32))
-  
+
+prob = open(args.prob_file,"w")  
 count = 0    
 source = glob.glob(os.path.join(args.source_path, '*.wav'))
+print("Testing " + str(len(source)), args.source_path)
 for filename in source:
   wav, samplerate = sf.read(filename,dtype='float32')
   if len(wav) > sample_length:
@@ -47,14 +48,8 @@ for filename in source:
   #0 kw, 1 falsekw, 2 notkw, 3 noise check labels.txt
   hit = out_tflite[0][args.label_index]
 
-  if args.greater_than:
-    if hit >= args.hit_sensitivity:
-      print(filename, hit)
-      count += 1
-  else:
-    if hit < args.hit_sensitivity:
-      print(filename, hit)
-      count += 1
+  prob.write(filename + "," + str(hit) + "\n")
+  count += 1
 print("total found " + str(count), len(source), args.source_path)
-
+prob.close()
 

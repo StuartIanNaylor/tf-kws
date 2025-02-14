@@ -45,8 +45,8 @@ noise_sensitivity = args.noise_sensitivity
 noise_index = args.noise_index
 
 # Load the TFLite model and allocate tensors.
+#interpreter = tf.lite.Interpreter(model_path=args.model_path)
 interpreter1 = tflite.Interpreter(model_path=args.model_path)
-#interpreter1 = Interpreter(model_path=args.model_path)
 interpreter1.allocate_tensors()
 
 # Get input and output tensors.
