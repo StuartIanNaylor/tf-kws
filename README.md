@@ -24,7 +24,7 @@ pcm.vlevel {
     plugins [{
         label vlevel_stereo
         input {
-            controls [ 0.5 4 10 ]
+            controls [ 0.25 0.9 20 ]
         }
     }]
 }
