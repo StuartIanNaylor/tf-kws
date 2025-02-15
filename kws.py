@@ -77,9 +77,11 @@ def sd_callback(rec, frames, ftime, status):
 
     out_tflite_argmax = np.argmax(out_tflite)
     #0 kw, 1 falsekw, 2 notkw, 3 noise check labels.txt
-    if out_tflite[0][out_tflite_argmax] > 0.99:
-      print(out_tflite_argmax, out_tflite[0][out_tflite_argmax])
-      reset_state = True
+    if out_tflite[0][out_tflite_argmax] > 0.90:
+      if out_tflite_argmax == 0:
+        reset_state = True
+        print(out_tflite_argmax, out_tflite[0][out_tflite_argmax])
+
 
     
 print("Loaded")
